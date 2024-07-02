@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <style>
+    /* Common styles */
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f9;
+      text-align: center;
+    }
+    .mission, form {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 1.4em;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    h3 {
+      font-size: 1em;
+      font-weight: normal;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    form {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    label {
+      margin-bottom: 5px;
+      color: #333;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <section class="mission">
+    <h1>Required Steps</h1>
+    <h3 id="displaySteps">Create mission first.</h3>
+    <h1>Mission Reward</h1>
+    <h3 id="displayReward">Create mission first.</h3>
+    <h1>End Date</h1>
+    <h3 id="displayEndDate">Create mission first.</h3>
+    <h1>Status</h1>
+    <h3 id="displayStatus">Create mission first.</h3>
+    <button id="updateMission">CREATE MISSION</button>
+  </section>
+
+  <!-- The Modal -->
+  <div id="missionModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form id="missionForm">
+        <label for="steps">Steps:</label>
+        <select id="steps" name="steps" aria-label="Select Steps">
+          <option>25000</option>
+          <option>30000</option>
+          <option>50000</option>
+          <option>55000</option>
+          <option>60000</option>
+          <option>70000</option>
+        </select>
+        <label for="reward">Reward:</label>
+        <select id="reward" name="reward" aria-label="Select Reward">
+          <option>1000</option>
+          <option>10000</option>
+          <option>20000</option>
+          <option>30000</option>
+          <option>40000</option>
+          <option>50000</option>
+        </select>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" aria-label="Select End Date" required>
+        <label for="status">Status:</label>
+        <select id="status" name="status" aria-label="Select Status">
+          <option>Active</option>
+          <option>Closed</option>
+         </select>
+        <button type="button" id="saveMission">SAVE</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      getAuth
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getAnalytics
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAUIljfabkgsGO8FkLTfSNMpd7NeZW0a_M",
+      authDomain: "treestride-project.firebaseapp.com",
+      projectId: "treestride-project",
+      storageBucket: "treestride-project.appspot.com",
+      messagingSenderId: "218404996569",
+      appId: "1:218404996569:web:d1daa406334c19cde5c5c8",
+      measurementId: "G-XR01C3LFWD"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const missionDocRef = doc(db, "mission", "currentMission");
+
+    async function loadMission() {
+      try {
+        const missionDoc = await getDoc(missionDocRef);
+        if (missionDoc.exists()) {
+          const data = missionDoc.data();
+          const endDate = new Date(data.endDate);
+
+          // Update the displayed mission information
+          document.getElementById('displaySteps').textContent = data.steps;
+          document.getElementById('displayReward').textContent = data.reward;
+          document.getElementById('displayEndDate').textContent = formatDate(endDate);
+          document.getElementById('displayStatus').textContent = data.status;
+          btn.textContent = "UPDATE MISSION";
+
+          // Check if today is the end date
+          const today = new Date();
+          if (isSameDate(today, endDate)) {
+            alert("Today is the end date of the mission!");
+          }
+
+          // Pre-fill the form inputs with existing data
+          document.getElementById('steps').value = data.steps;
+          document.getElementById('reward').value = data.reward;
+          document.getElementById('endDate').value = formatForInput(new Date());
+          document.getElementById('status').value = data.status;
+        } else {
+          console.log("No mission found, set new mission.");
+        }
+      } catch (error) {
+        console.error("Error loading mission: ", error);
+      }
+    }
+
+    // Helper function to compare dates (ignores time)
+    function isSameDate(date1, date2) {
+      return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+    }
+
+    // Load mission on page load
+    window.onload = loadMission;
+
+    function formatDate(date) {
+      const options = {
+        month: 'long'
+      }; // Get full month name
+      const month = date.toLocaleString('en-US', options); // Convert month to full name
+      const day = date.getDate(); // Get day of the month
+      const year = date.getFullYear(); // Get full year
+      return `${month} ${day}, ${year}`; // Combine into "Month Day, Year" format
+    }
+
+    function formatForInput(date) {
+      return date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    }
+
+    const modal = document.getElementById("missionModal");
+    const btn = document.getElementById("updateMission");
+    const span = document.getElementsByClassName("close")[0];
+
+    document.getElementById('saveMission').addEventListener('click', async function() {
+      const steps = document.getElementById('steps').value;
+      const reward = document.getElementById('reward').value;
+      const endDateValue = document.getElementById('endDate').value;
+      const status = document.getElementById('status').value;
+
+      // Format the dates to "Month Day, Year" before saving
+      const endDate = formatDate(new Date(endDateValue));
+
+      try {
+        await setDoc(missionDocRef, {
+          steps: steps,
+          reward: reward,
+          endDate: endDate,
+          status: status
+        });
+        console.log("Mission saved successfully!");
+        alert('Mission saved successfully!');
+        btn.textContent = "UPDATE MISSION";
+
+        document.getElementById('displaySteps').textContent = steps;
+        document.getElementById('displayReward').textContent = reward;
+        document.getElementById('displayEndDate').textContent = endDate;
+        document.getElementById('displayStatus').textContent = status;
+        
+        closeModal();
+      } catch (error) {
+        console.error("Error saving mission: ", error);
+        alert('Error saving mission!');
+      }
+    });
+
+    function openModal() {
+      modal.style.display = "flex"
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    btn.onclick = function() {
+      openModal();
+    }
+
+    span.onclick = function() {
+      closeModal();
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>
