@@ -15,17 +15,26 @@
       font-family: Georgia, sans-serif;
       display: flex;
       justify-content: center;
+      flex-direction: column;
       align-items: center;
       height: 100vh;
       margin: 0;
       background: #FAFAFA;
     }
+    header {
+      background: #4CAF50;
+      font-size: 1.4em;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 0.6em;
+    }
     .mission {
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       text-align: center;
-      width: 100%;
-      margin: 1em;
-      max-width: 400px;
+      width: 90%;
       padding: 20px;
       background-color: #ffffff;
       border-radius: 10px;
@@ -33,6 +42,9 @@
     h1 {
       font-size: 1.4em;
       margin-bottom: 10px;
+      border-radius: 0.4em;
+      border: 1px dashed silver;
+      padding: 0.6em;
       color: #333;
     }
     h3 {
@@ -107,6 +119,9 @@
   </style>
 </head>
 <body>
+  <header>
+        <h2>Manage Mission</h2>
+  </header>
   <section class="mission">
     <h1 id="displaySteps">Create mission first.</h1>
     <h3>Required Steps</h3>
@@ -206,7 +221,7 @@
           // Check if today is the end date
           const today = new Date();
           if (isSameDate(today, endDate)) {
-            alert("Today is the end date of the mission!");
+            // alert("Today is the end date of the mission!");
           }
 
           // Pre-fill the form inputs with existing data
