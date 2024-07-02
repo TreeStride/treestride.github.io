@@ -1,6 +1,9 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Mission</title>
   <style>
     /* Common styles */
     * {
@@ -9,18 +12,23 @@
       margin: 0;
     }
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f4f4f9;
-      text-align: center;
+      font-family: Georgia, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #FAFAFA;
     }
-    .mission, form {
+    .mission {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 100%;
+      margin: 1em;
       max-width: 400px;
-      margin: 20px auto;
       padding: 20px;
       background-color: #ffffff;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
       font-size: 1.4em;
@@ -28,14 +36,15 @@
       color: #333;
     }
     h3 {
-      font-size: 1em;
+      font-size: 1.1em;
       font-weight: normal;
       margin-bottom: 20px;
-      color: #555;
+      color: #444;
     }
     form {
       display: grid;
       gap: 10px;
+      width: 100%;
       margin-top: 20px;
     }
     label {
@@ -46,6 +55,7 @@
       width: 100%;
       padding: 10px;
       color: #333;
+      font-size: 1em;
       border: 1px solid #ddd;
       border-radius: 5px;
     }
@@ -98,14 +108,14 @@
 </head>
 <body>
   <section class="mission">
-    <h1>Required Steps</h1>
-    <h3 id="displaySteps">Create mission first.</h3>
-    <h1>Mission Reward</h1>
-    <h3 id="displayReward">Create mission first.</h3>
-    <h1>End Date</h1>
-    <h3 id="displayEndDate">Create mission first.</h3>
-    <h1>Status</h1>
-    <h3 id="displayStatus">Create mission first.</h3>
+    <h1 id="displaySteps">Create mission first.</h1>
+    <h3>Required Steps</h3>
+    <h1 id="displayReward">Create mission first.</h1>
+    <h3>Reward</h3>
+    <h1 id="displayEndDate">Create mission first.</h1>
+    <h3>End Date</h3>
+    <h1 id="displayStatus">Create mission first.</h1>
+    <h3>Status</h3>
     <button id="updateMission">CREATE MISSION</button>
   </section>
 
@@ -139,7 +149,7 @@
         <select id="status" name="status" aria-label="Select Status">
           <option>Active</option>
           <option>Closed</option>
-         </select>
+        </select>
         <button type="button" id="saveMission">SAVE</button>
       </form>
     </div>
@@ -264,7 +274,7 @@
         document.getElementById('displayReward').textContent = reward;
         document.getElementById('displayEndDate').textContent = endDate;
         document.getElementById('displayStatus').textContent = status;
-        
+
         closeModal();
       } catch (error) {
         console.error("Error saving mission: ", error);
