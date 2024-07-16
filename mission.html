@@ -1,303 +1,432 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Mission</title>
-  <style>
-    /* Common styles */
-    * {
-      box-sizing: border-box;
-      padding: 0;
-      margin: 0;
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: #F4F7FA;
-    }
-    header {
-      background: #fff;
-      box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
-      color: #444;
-      font-size: 1.2em;
-      text-align: center;
-      width: 100%;
-      padding: 1em;
-    }
-    .mission {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1),  0 -2px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 90%;
-      max-width: 500px;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 12px;
-      margin: auto;
-      margin-top: 100px;
-    }
-    h1, h3 {
-      color: #333;
-    }
-    h1{
-       font-size: 1.8rem;
-    }
-    h3 {
-      font-size: 1.2em;
-            font-weight: normal;
-      margin-bottom: 14px;
-    }
-    form {
-      display: grid;
-      gap: 15px;
-      width: 100%;
-      margin-top: 20px;
-    }
-    label {
-      margin-bottom: 5px;
-      color: #666;
-    }
-    select, input {
-      width: 100%;
-      padding: 12px;
-      color: #333;
-      font-size: 1em;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-    button {
-      cursor: pointer;
-      background-color: #6200EA;
-      color: white;
-      border: none;
-      padding: 12px;
-      font-size: 1.1em;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #3700B3;
-    }
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-    }
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .close:hover {
-      color: #000;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h2>Manage Mission</h2>
-  </header>
-  <section class="mission">
-    <h1 id="displaySteps">Create mission first.</h1>
-    <h3>Required Steps</h3>
-    <h1 id="displayReward">Create mission first.</h1>
-    <h3>Reward</h3>
-    <h1 id="displayEndDate">Create mission first.</h1>
-    <h3>End Date</h3>
-    <button id="updateMission">CREATE MISSION</button>
-  </section>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Mission</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap");
+      * {
+        box-sizing: border-box;
+        font-family: "Exo 2", "Roboto";
+        font-optical-sizing: auto;
+        font-display: swap;
+        font-style: normal;
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        background: #f4f7fa;
+        color: #444;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        color: #444;
+        padding: 1em;
+      }
+      header h1 {
+        margin-left: 2rem;
+      }
+      header a {
+        font-size: 1.4rem;
+        color: #444;
+      }
+      main {
+        display: grid;
+        align-items: center;
+        padding: 2rem;
+      }
+      .mission {
+        display: grid;
+        gap: 1rem;
+        border: 2px solid #444;
+        text-align: center;
+        padding: 20px;
+        width: 80%;
+        margin: auto;
+        max-width: 480px;
+        transition: all 0.3s ease-in;
+        background-color: #ffffff;
+        border-radius: 10px;
+      }
+      .mission:hover {
+        transform: scale(1.06);
+      }
+      .mission h1 {
+        font-size: 1.6rem;
+      }
+      .mission h3 {
+        font-weight: normal;
+        font-size: 1rem;
+      }
+      form {
+        display: grid;
+        gap: 10px;
+        width: 100%;
+        margin-top: 20px;
+      }
+      label {
+        margin-bottom: 5px;
+        color: #333;
+      }
+      select,
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        color: #333;
+        font-size: 1em;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      button {
+        cursor: pointer;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 1em;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: #fefefe;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 10px;
+      }
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      #updateMission {
+        position: fixed;
+        right: 5%;
+        bottom: 5%;
+        height: 64px;
+        width: 64px;
+        border-radius: 50%;
+        font-size: 1.4rem;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        border: 2px solid #4aad5b;
+      }
+      .user-progress .user {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+      .user-progress .user h2 {
+        margin-bottom: 5px;
+      }
+      .user-progress .user p {
+        margin-bottom: 5px;
+      }
+      .user-progress-list {
+        width: 90%;
+        padding: 20px;
+        border-radius: 12px;
+        margin: auto;
+        margin-top: 24px;
+        margin-bottom: 24px;
+      }
+      .user-progress-list h1 {
+        text-align: center;
+        font-size: 2.4rem;
+        margin-bottom: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="dashboard.html"><i class="fa-solid fa-arrow-left"></i></a>
+      <h1>Manage Mission</h1>
+      <button id="updateMission">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+    </header>
 
-  <!-- The Modal -->
-  <div id="missionModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <form id="missionForm">
-        <label for="steps">Steps:</label>
-        <select id="steps" name="steps" aria-label="Select Steps">
-          <option>25</option>
-          <option>30000</option>
-          <option>50000</option>
-          <option>55000</option>
-          <option>60000</option>
-          <option>70000</option>
-        </select>
-        <label for="reward">Reward:</label>
-        <select id="reward" name="reward" aria-label="Select Reward">
-          <option>1000</option>
-          <option>10000</option>
-          <option>20000</option>
-          <option>30000</option>
-          <option>40000</option>
-          <option>50000</option>
-        </select>
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" aria-label="Select End Date" required>
-        <button type="button" id="saveMission">SAVE</button>
-      </form>
+    <main>
+      <section class="mission">
+        <div>
+          <h1 id="displaySteps">Create mission first.</h1>
+          <h3>Required Steps</h3>
+        </div>
+        <div>
+          <h1 id="displayReward">Create mission first.</h1>
+          <h3>Reward</h3>
+        </div>
+        <div>
+          <h1 id="displayEndDate">Create mission first.</h1>
+          <h3>End Date</h3>
+        </div>
+      </section>
+
+      <section class="user-progress-list">
+        <h1>User Progress</h1>
+        <div class="user-progress" id="userProgress"></div>
+      </section>
+    </main>
+
+    <!-- The Modal -->
+    <div id="missionModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="missionForm">
+          <label for="steps">Steps:</label>
+          <select id="steps" name="steps" aria-label="Select Steps">
+            <option>250</option>
+            <option>30000</option>
+            <option>50000</option>
+            <option>55000</option>
+            <option>60000</option>
+            <option>70000</option>
+          </select>
+          <label for="reward">Reward:</label>
+          <select id="reward" name="reward" aria-label="Select Reward">
+            <option>1000</option>
+            <option>10000</option>
+            <option>20000</option>
+            <option>30000</option>
+            <option>40000</option>
+            <option>50000</option>
+          </select>
+          <label for="endDate">End Date:</label>
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            aria-label="Select End Date"
+            required
+          />
+          <button type="button" id="saveMission">SAVE</button>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <script type="module">
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import {
-      getAuth
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import {
-      getAnalytics
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    <script
+      src="https://kit.fontawesome.com/ec19991922.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        collection,
+        query,
+        where,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAUIljfabkgsGO8FkLTfSNMpd7NeZW0a_M",
-      authDomain: "treestride-project.firebaseapp.com",
-      projectId: "treestride-project",
-      storageBucket: "treestride-project.appspot.com",
-      messagingSenderId: "218404996569",
-      appId: "1:218404996569:web:d1daa406334c19cde5c5c8",
-      measurementId: "G-XR01C3LFWD"
-    };
+      const firebaseConfig = {
+        apiKey: "AIzaSyAUIljfabkgsGO8FkLTfSNMpd7NeZW0a_M",
+        authDomain: "treestride-project.firebaseapp.com",
+        projectId: "treestride-project",
+        storageBucket: "treestride-project.appspot.com",
+        messagingSenderId: "218404996569",
+        appId: "1:218404996569:web:d1daa406334c19cde5c5c8",
+        measurementId: "G-XR01C3LFWD",
+      };
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
 
-    const missionDocRef = doc(db, "mission", "currentMission");
-
-    async function loadMission() {
-      try {
-        const missionDoc = await getDoc(missionDocRef);
-        if (missionDoc.exists()) {
-          const data = missionDoc.data();
-          const endDate = new Date(data.endDate);
-
-          // Update the displayed mission information
-          document.getElementById('displaySteps').textContent = data.steps;
-          document.getElementById('displayReward').textContent = data.reward;
-          document.getElementById('displayEndDate').textContent = formatDate(endDate);
-          btn.textContent = "UPDATE MISSION";
-
-          // Check if today is the end date
-          const today = new Date();
-          if (isSameDate(today, endDate)) {
-            // alert("Today is the end date of the mission!");
+      // Check authentication state
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const email = user.email;
+          if (email !== "admin@gmail.com") {
+            alert("Unauthorized access. Redirecting to login.");
+            window.location.href = "index.html";
           }
-
-          // Pre-fill the form inputs with existing data
-          document.getElementById('steps').value = data.steps;
-          document.getElementById('reward').value = data.reward;
-          document.getElementById('endDate').value = formatForInput(new Date());
         } else {
-          console.log("No mission found, set new mission.");
+          alert("You are not logged in. Redirecting to login.");
+          window.location.href = "index.html";
         }
-      } catch (error) {
-        console.error("Error loading mission: ", error);
+      });
+
+      const missionDocRef = doc(db, "mission", "currentMission");
+
+      async function loadMission() {
+        try {
+          const missionDoc = await getDoc(missionDocRef);
+          if (missionDoc.exists()) {
+            const data = missionDoc.data();
+            const endDate = new Date(data.endDate);
+
+            document.getElementById("displaySteps").textContent = data.steps;
+            document.getElementById("displayReward").textContent = data.reward;
+            document.getElementById("displayEndDate").textContent =
+              formatDate(endDate);
+
+            const today = new Date();
+            if (isSameDate(today, endDate)) {
+              // alert("Today is the end date of the mission!");
+            }
+
+            // Pre-fill the form inputs with existing data
+            document.getElementById("steps").value = data.steps;
+            document.getElementById("reward").value = data.reward;
+            document.getElementById("endDate").value = formatForInput(
+              new Date()
+            );
+          } else {
+            console.log("No mission found, set new mission.");
+          }
+        } catch (error) {
+          console.error("Error loading mission: ", error);
+        }
       }
-    }
 
-    // Helper function to compare dates (ignores time)
-    function isSameDate(date1, date2) {
-      return date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate();
-    }
+      // Helper function to compare dates (ignores time)
+      function isSameDate(date1, date2) {
+        return (
+          date1.getFullYear() === date2.getFullYear() &&
+          date1.getMonth() === date2.getMonth() &&
+          date1.getDate() === date2.getDate()
+        );
+      }
 
-    // Load mission on page load
-    window.onload = loadMission;
+      // Load mission on page load
+      window.onload = function () {
+        loadMission();
+        loadUserProgress();
+      };
 
-    function formatDate(date) {
-      const options = {
-        month: 'long'
-      }; // Get full month name
-      const month = date.toLocaleString('en-US', options); // Convert month to full name
-      const day = date.getDate(); // Get day of the month
-      const year = date.getFullYear(); // Get full year
-      return `${month} ${day}, ${year}`; // Combine into "Month Day, Year" format
-    }
+      function formatDate(date) {
+        const options = {
+          month: "long",
+        };
+        const month = date.toLocaleString("en-US", options);
+        const day = date.getDate();
+        const year = date.getFullYear();
+        return `${month} ${day}, ${year}`;
+      }
 
-    function formatForInput(date) {
-      return date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-    }
+      function formatForInput(date) {
+        return date.toISOString().split("T")[0];
+      }
 
-    const modal = document.getElementById("missionModal");
-    const btn = document.getElementById("updateMission");
-    const span = document.getElementsByClassName("close")[0];
+      async function loadUserProgress() {
+        try {
+          const usersColRef = collection(db, "users");
+          const q = query(usersColRef, where("missionSteps", "!=", 0));
+          const querySnapshot = await getDocs(q);
 
-    document.getElementById('saveMission').addEventListener('click', async function() {
-      const steps = document.getElementById('steps').value;
-      const reward = document.getElementById('reward').value;
-      const endDateValue = document.getElementById('endDate').value;
+          const userProgressContainer = document.getElementById("userProgress");
+          userProgressContainer.innerHTML = "";
 
-      // Format the dates to "Month Day, Year" before saving
-      const endDate = formatDate(new Date(endDateValue));
+          querySnapshot.forEach((doc) => {
+            const userData = doc.data();
+            const userDiv = document.createElement("div");
+            userDiv.className = "user";
+            userDiv.innerHTML = `
+              <img src="${userData.photoUrl}" alt="${userData.username}">
+              <h2>${userData.username}</h2>
+              <p>Mission Steps: ${userData.missionSteps}</p>
+              <p>Missions Completed: ${userData.missionsCompleted}</p>
+            `;
+            userProgressContainer.appendChild(userDiv);
+          });
+        } catch (error) {
+          console.error("Error loading user progress: ", error);
+        }
+      }
 
-      try {
-        await setDoc(missionDocRef, {
-          steps: steps,
-          reward: reward,
-          endDate: endDate,
+      const modal = document.getElementById("missionModal");
+      const btn = document.getElementById("updateMission");
+      const span = document.getElementsByClassName("close")[0];
+
+      document
+        .getElementById("saveMission")
+        .addEventListener("click", async function () {
+          const steps = document.getElementById("steps").value;
+          const reward = document.getElementById("reward").value;
+          const endDateValue = document.getElementById("endDate").value;
+
+          // Format the dates to "Month Day, Year" before saving
+          const endDate = formatDate(new Date(endDateValue));
+
+          try {
+            await setDoc(missionDocRef, {
+              steps: steps,
+              reward: reward,
+              endDate: endDate,
+            });
+            console.log("Mission saved successfully!");
+            alert("Mission saved successfully!");
+            document.getElementById("displaySteps").textContent = steps;
+            document.getElementById("displayReward").textContent = reward;
+            document.getElementById("displayEndDate").textContent = endDate;
+
+            closeModal();
+          } catch (error) {
+            console.error("Error saving mission: ", error);
+            alert("Error saving mission!");
+          }
         });
-        console.log("Mission saved successfully!");
-        alert('Mission saved successfully!');
-        btn.textContent = "UPDATE MISSION";
 
-        document.getElementById('displaySteps').textContent = steps;
-        document.getElementById('displayReward').textContent = reward;
-        document.getElementById('displayEndDate').textContent = endDate;
-        
-        closeModal();
-      } catch (error) {
-        console.error("Error saving mission: ", error);
-        alert('Error saving mission!');
+      function openModal() {
+        modal.style.display = "flex";
       }
-    });
 
-    function openModal() {
-      modal.style.display = "flex"
-    }
-
-    function closeModal() {
-      modal.style.display = "none";
-    }
-
-    btn.onclick = function() {
-      openModal();
-    }
-
-    span.onclick = function() {
-      closeModal();
-    }
-
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        closeModal();
+      function closeModal() {
+        modal.style.display = "none";
       }
-    }
-  </script>
-</body>
+
+      btn.onclick = function () {
+        openModal();
+      };
+
+      span.onclick = function () {
+        closeModal();
+      };
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          closeModal();
+        }
+      };
+    </script>
+  </body>
 </html>

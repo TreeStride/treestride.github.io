@@ -1,149 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      padding: 0;
-      margin: 0;
-    }
-    body {
-      font-family: Georgia, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      padding: 0;
-      background: #FAFAFA;
-      flex: 1;
-    }
-    form, input {
-      display: grid;
-      width: 100%;
-    }
-    .login-container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      margin: 1em;
-    }
-    .login-container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
-    }
-    .login-container label {
-      display: block;
-      width: 100%;
-      margin-bottom: 8px;
-      color: #555;
-    }
-    .login-container input[type="email"],
-    .login-container input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-    .login-container input[type="email"]:focus,
-    .login-container input[type="password"]:focus {
-      border-color: #4CAF50;
-      width: 100%;
-    }
-    .login-container button {
-      width: 100%;
-      padding: 10px;
-      display: grid;
-      background-color: #4CAF50;
-      border: none;
-      border-radius: 4px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .login-container button:hover {
-      background-color: #4CAF50;
-    }
-    .login-container .error-message {
-      color: red;
-      display: block;
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-  <div class="login-container">
-    <h2>Login Form</h2>
-    <form id="login-form">
-      <label for="email">Email:</label>
-      <input type="email" id="email" required>
-      <label for="password">Password:</label>
-      <input type="password" id="password" required>
-      <button type="submit">Login</button>
-      <div class="error-message" id="error-message"></div>
-    </form>
-  </div>
-
-  <!-- Firebase App (modular) -->
-  <script type="module">
-    // Import the necessary Firebase modules
-    import {
-      initializeApp
-    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import {
-      getAuth,
-      signInWithEmailAndPassword
-    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAUIljfabkgsGO8FkLTfSNMpd7NeZW0a_M",
-      authDomain: "treestride-project.firebaseapp.com",
-      projectId: "treestride-project",
-      storageBucket: "treestride-project.appspot.com",
-      messagingSenderId: "218404996569",
-      appId: "1:218404996569:web:d1daa406334c19cde5c5c8",
-      measurementId: "G-XR01C3LFWD"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Login form submission
-    document.getElementById('login-form').addEventListener('submit', async function(event) {
-      event.preventDefault(); // Prevent form from submitting normally
-
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorMessage = document.getElementById('error-message');
-
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        if (email === 'admin@gmail.com') {
-          window.location.href = 'admin.html'; // Redirect to admin page
-        } else if (email === 'forester@gmail.com') {
-          window.location.href = 'forester.html'; // Redirect to forester page
-        } else {
-          errorMessage.textContent = 'Unauthorized email';
-        }
-      } catch (error) {
-        errorMessage.textContent = error.message;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TreeStide - Login</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
       }
-    });
-  </script>
-</body>
+      body {
+        font-family: Georgia, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        background: #fafafa;
+        flex: 1;
+      }
+      form,
+      input {
+        display: grid;
+        width: 100%;
+      }
+      .login-container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 600px;
+        margin: 1em;
+      }
+      .login-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+      }
+      .login-container label {
+        display: block;
+        width: 100%;
+        margin-bottom: 8px;
+        color: #555;
+      }
+      .login-container input[type="email"],
+      .login-container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+      .login-container input[type="email"]:focus,
+      .login-container input[type="password"]:focus {
+        border-color: #4caf50;
+        width: 100%;
+      }
+      .login-container button {
+        width: 100%;
+        padding: 10px;
+        display: grid;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .login-container button:hover {
+        background-color: #4caf50;
+      }
+      .login-container .error-message {
+        color: red;
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Admin Login</h2>
+      <form id="login-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required />
+        <label for="password">Password:</label>
+        <input type="password" id="password" required />
+        <button type="submit">Login</button>
+        <div class="error-message" id="error-message"></div>
+      </form>
+    </div>
+
+    <!-- Firebase App (modular) -->
+    <script type="module">
+      // Import the necessary Firebase modules
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAUIljfabkgsGO8FkLTfSNMpd7NeZW0a_M",
+        authDomain: "treestride-project.firebaseapp.com",
+        projectId: "treestride-project",
+        storageBucket: "treestride-project.appspot.com",
+        messagingSenderId: "218404996569",
+        appId: "1:218404996569:web:d1daa406334c19cde5c5c8",
+        measurementId: "G-XR01C3LFWD",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Login form submission
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const errorMessage = document.getElementById("error-message");
+
+          try {
+            const userCredential = await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+            const user = userCredential.user;
+
+            if (email === "admin@gmail.com") {
+              window.location.href = "admin.html"; // Redirect to admin page
+            } else if (email === "forester@gmail.com") {
+              window.location.href = "forester.html"; // Redirect to forester page
+            } else {
+              errorMessage.textContent = "Unauthorized email";
+            }
+          } catch (error) {
+            errorMessage.textContent = error.message;
+          }
+        });
+    </script>
+  </body>
 </html>

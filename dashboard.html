@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TreeStride - Admin Dashboard</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap");
+      * {
+        box-sizing: border-box;
+        font-family: "Exo 2", "Roboto";
+        font-optical-sizing: auto;
+        font-display: swap;
+        font-style: normal;
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        background: #f4f7fa;
+        color: #444;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        color: #444;
+        padding: 1em;
+      }
+      .navigation {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 360px);
+        justify-content: space-evenly;
+        align-items: center;
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+        row-gap: 1rem;
+      }
+      .navigation button {
+        padding: 3.4em;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background: #3a9249;
+        color: #fff;
+        border: 2px solid #4fbb61;
+        border-radius: 1em;
+        font-size: 1.2em;
+        transition: all 0.3s ease-in;
+      }
+      .navigation button:hover {
+        transform: scale(1.06);
+      }
+      .users {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 360px);
+        gap: 1rem;
+        display: grid;
+        width: 90%;
+        justify-content: space-evenly;
+        margin: auto;
+        padding: 1rem;
+      }
+      .user-list h1 {
+        text-align: center;
+        font-size: 2.4rem;
+      }
+      .user-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 0.5em;
+        padding: 1em;
+        text-align: center;
+        width: 360px;
+        margin: auto;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .user-card img {
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Admin Dashboard</h1>
+    </header>
+    <main>
+      <section class="navigation">
+        <button>ANNOUNCEMENT</button>
+        <button onclick="window.location.href ='mission.html'">
+          MANAGE MISSION
+        </button>
+        <button onclick="window.location.href ='trees.html'">
+          MANAGE TREES
+        </button>
+      </section>
+      <section class="user-list">
+        <h1>User List</h1>
+        <div class="users" id="user-list"></div>
+      </section>
+    </main>
+    <footer></footer>
+    <script type="module">
+      // Import the necessary Firebase modules
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAUIljfabkgsGO8FkLTfSNMpd7NeZW0a_M",
+        authDomain: "treestride-project.firebaseapp.com",
+        projectId: "treestride-project",
+        storageBucket: "treestride-project.appspot.com",
+        messagingSenderId: "218404996569",
+        appId: "1:218404996569:web:d1daa406334c19cde5c5c8",
+        measurementId: "G-XR01C3LFWD",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Check authentication state
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const email = user.email;
+          if (email !== "admin@gmail.com") {
+            alert("Unauthorized access. Redirecting to login.");
+            window.location.href = "index.html";
+          } else {
+            fetchUsers();
+          }
+        } else {
+          alert("You are not logged in. Redirecting to login.");
+          window.location.href = "index.html";
+        }
+      });
+
+      // Fetch user data from Firestore
+      async function fetchUsers() {
+        const userList = document.getElementById("user-list");
+        const querySnapshot = await getDocs(collection(db, "users"));
+
+        querySnapshot.forEach((doc) => {
+          const userData = doc.data();
+          const userCard = document.createElement("div");
+          userCard.classList.add("user-card");
+
+          userCard.innerHTML = `
+            <img src="${userData.photoURL}" alt="${userData.username}'s photo" />
+            <h3>${userData.username}</h3>
+            <p>Total Points: ${userData.totalPoints}</p>
+            <p>Total Steps: ${userData.totalSteps}</p>
+            <p>Total Trees: ${userData.totalTrees}</p>
+          `;
+          userList.appendChild(userCard);
+        });
+      }
+    </script>
+    <script>
+      let menu = document.querySelector("header button");
+      let nav = document.querySelector(".nav");
+      menu.addEventListener("click", () => {
+        nav.style.display = "block";
+      });
+      nav.addEventListener("click", () => {
+        nav.style.display = "none";
+      });
+    </script>
+  </body>
+</html>
