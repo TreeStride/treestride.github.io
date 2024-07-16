@@ -22,11 +22,26 @@
       header {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         background: #fff;
         color: #444;
         padding: 1em;
+      }
+      header h1 {
+        margin: 0;
+      }
+      .sign-out-button {
+        background: none;
+        border: none;
+        color: #444;
+        cursor: pointer;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+      }
+      .sign-out-button i {
+        margin-right: 0.5em;
       }
       .navigation {
         display: grid;
@@ -84,6 +99,9 @@
   <body>
     <header>
       <h1>Admin Dashboard</h1>
+      <button class="sign-out-button" id="sign-out">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </button>
     </header>
     <main>
       <section class="navigation">
@@ -100,13 +118,18 @@
         <div class="users" id="user-list"></div>
       </section>
     </main>
-    <footer></footer>
+
+    <script
+      src="https://kit.fontawesome.com/ec19991922.js"
+      crossorigin="anonymous"
+    ></script>
     <script type="module">
       // Import the necessary Firebase modules
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import {
         getAuth,
         onAuthStateChanged,
+        signOut,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
       import {
         getFirestore,
@@ -166,15 +189,17 @@
           userList.appendChild(userCard);
         });
       }
-    </script>
-    <script>
-      let menu = document.querySelector("header button");
-      let nav = document.querySelector(".nav");
-      menu.addEventListener("click", () => {
-        nav.style.display = "block";
-      });
-      nav.addEventListener("click", () => {
-        nav.style.display = "none";
+
+      // Sign out function
+      const signOutButton = document.getElementById("sign-out");
+      signOutButton.addEventListener("click", () => {
+        signOut(auth)
+          .then(() => {
+            window.location.href = "index.html";
+          })
+          .catch((error) => {
+            console.error("Error signing out: ", error);
+          });
       });
     </script>
   </body>
