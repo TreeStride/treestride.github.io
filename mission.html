@@ -395,34 +395,32 @@
     const btn = document.getElementById("updateMission");
     const span = document.getElementsByClassName("close")[0];
 
-    document
-    .getElementById("saveMission")
-    .addEventListener("click", async function () {
-      const steps = document.getElementById("steps").value;
-      const reward = document.getElementById("reward").value;
-      const endDateValue = document.getElementById("endDate").value;
+    document.getElementById("saveMission").addEventListener("click", async function () {
+  const steps = document.getElementById("steps").value;
+  const reward = document.getElementById("reward").value;
+  const endDateValue = document.getElementById("endDate").value;
 
-      // Format the dates to "Month Day, Year" before saving
-      const endDate = formatDate(new Date(endDateValue));
+  // Save the date in ISO 8601 format
+  const endDate = new Date(endDateValue).toISOString();
 
-      try {
-        await setDoc(missionDocRef, {
-          steps: steps,
-          reward: reward,
-          endDate: endDate,
-        });
-        console.log("Mission saved successfully!");
-        alert("Mission saved successfully!");
-        document.getElementById("displaySteps").textContent = steps;
-        document.getElementById("displayReward").textContent = reward;
-        document.getElementById("displayEndDate").textContent = endDate;
-
-        closeModal();
-      } catch (error) {
-        console.error("Error saving mission: ", error);
-        alert("Error saving mission!");
-      }
+  try {
+    await setDoc(missionDocRef, {
+      steps: steps,
+      reward: reward,
+      endDate: endDate,
     });
+    console.log("Mission saved successfully!");
+    alert("Mission saved successfully!");
+    document.getElementById("displaySteps").textContent = steps;
+    document.getElementById("displayReward").textContent = reward;
+    document.getElementById("displayEndDate").textContent = formatDate(new Date(endDate));
+
+    closeModal();
+  } catch (error) {
+    console.error("Error saving mission: ", error);
+    alert("Error saving mission!");
+  }
+});
 
     function openModal() {
       modal.style.display = "flex";
