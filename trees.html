@@ -77,7 +77,6 @@
     }
     button:hover {
       background-color: #4aad5b;
-      transform: scale(1.1);
     }
     /* Modal Styles */
     .modal {
@@ -98,7 +97,8 @@
       padding: 30px;
       border-radius: 12px;
       width: 90%;
-      max-width: 500px;
+      max-width: 480px;
+      overflow-y: scroll;
     }
     .close {
       color: #aaa;
@@ -165,10 +165,6 @@
       margin-top: 0.6rem;
       padding: 0 0.6rem 0.6rem 0.6rem;
     }
-    .two-column-btn button:hover {
-      background-color: #4aad5b;
-      transform: scale(1.04);
-    }
     .two-column-btn div {
       padding: 0.4rem;
     }
@@ -196,7 +192,7 @@
       max-height: 72px;
       overflow-y: scroll;
     }
-    #currentImageLabel{
+    #currentImageLabel {
       font-size: 12px;
       white-space: pre;
       overflow: hidden;
@@ -264,8 +260,18 @@
             </select>
           </div>
         </div>
+        <label for="availableTrees">Available Trees:</label>
+        <input
+        type="number"
+        id="availableTrees"
+        name="availableTrees"
+        placeholder="Number of Available Trees"
+        aria-label="Enter Number of Available Trees"
+        required
+        />
         <label for="treeImage">Upload Image:</label>
         <input type="file" id="treeImageFile" name="treeImageFile" accept="image/*" aria-label="Upload Image" />
+
         <span id="currentImageLabel"></span>
         <input type="hidden" id="treeImage" name="treeImage" />
         <input type="hidden" id="existingTreeImage" name="existingTreeImage" />
@@ -292,6 +298,7 @@
       deleteDoc,
       updateDoc,
       getDocs,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import {
       getStorage,
@@ -399,10 +406,11 @@
           <p>${data.description}</p>
           </div>
           <p style="margin-top:0.6rem"><strong>Type:</strong> ${data.type}</p>
+          <p><strong>Available:</strong> ${data.availableTrees}</p>
           </div>
           <div class="two-column-btn">
           <div>
-          <button onclick="editTree('${doc.id}', '${data.name}', '${data.description}', '${data.treeCost}', '${data.type}', '${data.image}')">Edit</button>
+          <button onclick="editTree('${doc.id}', '${data.name}', '${data.description}', '${data.treeCost}', '${data.type}', '${data.image}', '${data.availableTrees}')">Edit</button>
           </div>
           <div>
           <button onclick="deleteTree('${doc.id}')">Delete</button>
@@ -423,7 +431,7 @@
       return imageUrl;
     }
 
-    async function addTree(name, description, treeCost, type, imageFile) {
+    async function addTree(name, description, treeCost, type, imageFile, availableTrees) {
       try {
         const imageUrl = await uploadImage(imageFile);
         await addDoc(treesCollectionRef, {
@@ -432,6 +440,8 @@
           treeCost: treeCost,
           type: type,
           image: imageUrl,
+          availableTrees: availableTrees,
+          timestamp: serverTimestamp()
         });
         console.log("Tree added successfully!");
         alert("Tree added successfully!");
@@ -443,7 +453,7 @@
       }
     }
 
-    async function updateTree(id, name, description, treeCost, type, imageFile) {
+    async function updateTree(id, name, description, treeCost, type, imageFile, availableTrees) {
       try {
         let imageUrl = document.getElementById("existingTreeImage").value;
 
@@ -458,6 +468,8 @@
           treeCost: treeCost,
           type: type,
           image: imageUrl,
+          availableTrees: availableTrees,
+          timestamp: serverTimestamp()
         });
 
         console.log("Tree updated successfully!");
@@ -484,13 +496,14 @@
 
     window.deleteTree = deleteTree;
 
-    window.editTree = function (id, name, description, treeCost, type, image) {
+    window.editTree = function (id, name, description, treeCost, type, image, availableTrees) {
       document.getElementById("treeId").value = id;
       document.getElementById("treeName").value = name;
       document.getElementById("treeDescription").value = description;
       document.getElementById("treeCost").value = treeCost;
       document.getElementById("treeType").value = type;
       document.getElementById("existingTreeImage").value = image;
+      document.getElementById("availableTrees").value = availableTrees;
       document.getElementById("treeImageFile").value = "";
       document.getElementById("currentImageLabel").textContent = `Current File: ${name} Image`;
       openModal(treeModal);
@@ -511,11 +524,12 @@
       const treeCost = document.getElementById("treeCost").value;
       const type = document.getElementById("treeType").value;
       const imageFile = document.getElementById("treeImageFile").files[0];
+      const availableTrees = document.getElementById("availableTrees").value;
 
       if (id) {
-        await updateTree(id, name, description, treeCost, type, imageFile);
+        await updateTree(id, name, description, treeCost, type, imageFile, availableTrees);
       } else {
-        await addTree(name, description, treeCost, type, imageFile);
+        await addTree(name, description, treeCost, type, imageFile, availableTrees);
       }
     });
   </script>
